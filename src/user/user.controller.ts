@@ -31,7 +31,27 @@ import { UserDto } from "./dto/user.dto";
       },
       repairs: {
         eager: true
-      }
+      },
+      'payment_method.formSelectEntity':{
+        eager: true,
+        alias: 'rep1',
+        persist: ['id']
+      },
+      'project.formSelectEntity':{
+        eager: true
+      },
+      'building_type.formSelectEntity':{
+        eager: true,
+        alias: 'rep16',
+      },
+      'rooms.formSelectEntity':{
+        eager: true,
+        alias: 'rep4',
+      },
+      'repairs.formSelectEntity':{
+        eager: true,
+        alias: 'rep2',
+      },
     }
   }
 })
