@@ -28,7 +28,7 @@ export class AuthController {
     getProfile(@Request() req, @UserDecorator() user: any) {
         return this.auth.profile(user);
     }
-    
+
     //
     // // @Recaptcha()
     @Post("login")
