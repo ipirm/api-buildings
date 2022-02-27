@@ -1,17 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { OptionService } from './option.service';
-import { CreateOptionDto } from './dto/create-option.dto';
-import { UpdateOptionDto } from './dto/update-option.dto';
+import { Controller } from "@nestjs/common";
+import { OptionService } from "./option.service";
 import { ApiTags } from "@nestjs/swagger";
 import { Crud, CrudController } from "@nestjsx/crud";
-import { ElementEntity } from "../element/entities/element.entity";
-import { ElementService } from "../element/element.service";
 import { FormOptionEntity } from "./entities/option.entity";
 
 @ApiTags("Option")
 @Crud({
   model: {
     type: FormOptionEntity
+  },
+  query: {
+    join: {
+      formSelectEntity: {
+        eager: true
+      }
+    }
   }
 })
 @Controller("api/option")
