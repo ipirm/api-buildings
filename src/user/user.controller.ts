@@ -1,10 +1,11 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Param } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { ApiTags } from "@nestjs/swagger";
 import { UserEntity } from "./entities/user.entity";
 import { Crud, CrudController, CrudRequest, Override, ParsedBody, ParsedRequest } from "@nestjsx/crud";
 import { UserManyDto } from "./dto/user-many.dto";
 import { UserDto } from "./dto/user.dto";
+import { UpdateResult } from "typeorm";
 
 @ApiTags("User")
 @Crud({
@@ -66,6 +67,15 @@ export class UserController implements CrudController<UserEntity> {
     @ParsedBody() dto: UserEntity
   ): Promise<UserEntity> {
     return this.service.createOneBase(req, dto);
+  }
+
+  @Override()
+  updateOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: UserEntity,
+    @Param("id") id: number
+  ): Promise<UpdateResult> {
+    return this.service.updateOneBase(req, dto, id);
   }
 
   // @Post()
