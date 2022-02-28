@@ -36,22 +36,31 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   async updateOneBase(req: CrudRequest, dto: UserEntity, id: number): Promise<UpdateResult> {
-
     if (dto.rooms) {
+      const user = await this.user.findOne(id, { relations: ["rooms"] });
       const rooms = await this.option.findByIds(dto.rooms.toString().split(",").map(item => parseInt(item)));
-      Object.assign(dto, { rooms: [...rooms] });
+      user.rooms = [...rooms];
+      await this.user.save(user);
+      delete dto.rooms;
     }
 
     if (dto.building_type) {
+      const user = await this.user.findOne(id, { relations: ["building_type"] });
       const building_type = await this.option.findByIds(dto.building_type.toString().split(",").map(item => parseInt(item)));
-      Object.assign(dto, { building_type: [...building_type] });
+      user.building_type = [...building_type];
+      await this.user.save(user);
+      delete dto.building_type;
     }
 
     if (dto.repairs) {
+      const user = await this.user.findOne(id, { relations: ["repairs"] });
       const repairs = await this.option.findByIds(dto.repairs.toString().split(",").map(item => parseInt(item)));
-      Object.assign(dto, { repairs: [...repairs] });
+      user.repairs = [...repairs];
+      await this.user.save(user);
+      delete dto.repairs;
     }
 
+// console.log(dto);
 
     return await this.user.update(id, { ...dto });
     ;

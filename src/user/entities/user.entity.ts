@@ -54,6 +54,7 @@ export class UserEntity extends BaseEntity {
 
   @BeforeUpdate()
   async generatePasswordHashUpdate(): Promise<void> {
+    if (this.password !== this.password)
     this.password = await bcrypt.hashSync(this.password, bcrypt.genSaltSync(this.salt));
   }
 
