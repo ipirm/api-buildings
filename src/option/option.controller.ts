@@ -1,9 +1,13 @@
-import { Controller } from "@nestjs/common";
+import { Controller, UseGuards } from "@nestjs/common";
 import { OptionService } from "./option.service";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { FormOptionEntity } from "./entities/option.entity";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 
+
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags("Option")
 @Crud({
   model: {

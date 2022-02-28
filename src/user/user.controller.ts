@@ -1,12 +1,16 @@
-import { Controller, Param } from "@nestjs/common";
+import { Controller, Param, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UserEntity } from "./entities/user.entity";
 import { Crud, CrudController, CrudRequest, Override, ParsedBody, ParsedRequest } from "@nestjsx/crud";
 import { UserManyDto } from "./dto/user-many.dto";
 import { UserDto } from "./dto/user.dto";
 import { UpdateResult } from "typeorm";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 
+
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags("User")
 @Crud({
   model: {

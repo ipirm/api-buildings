@@ -1,9 +1,13 @@
-import { Controller } from "@nestjs/common";
+import { Controller, UseGuards } from "@nestjs/common";
 import { ElementService } from "./element.service";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { ElementEntity } from "./entities/element.entity";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 
+
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags("Element")
 @Crud({
   model: {
@@ -11,7 +15,7 @@ import { ElementEntity } from "./entities/element.entity";
   },
   query: {
     join: {
-      formOptionEntities:{
+      formOptionEntities: {
         eager: true
       }
     }
