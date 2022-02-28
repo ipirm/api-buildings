@@ -40,7 +40,7 @@ export class AuthService {
             }, HttpStatus.FORBIDDEN);
 
 
-        if (user.role !== Role.Admin)
+        if (user.role === Role.Mida)
             throw new HttpException({
                 status: HttpStatus.FORBIDDEN,
                 error: "Вы не являетесь админом"
