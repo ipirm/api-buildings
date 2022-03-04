@@ -6,8 +6,8 @@ import { ElementEntity } from "./entities/element.entity";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 
 
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+// @ApiBearerAuth()
+// @UseGuards(JwtAuthGuard)
 @ApiTags("Element")
 @Crud({
   model: {

@@ -80,40 +80,40 @@ export class AuthService {
         };
     }
     //
-    // async loginMida(loginDto: LoginDto): Promise<any> {
-    //     let valid: Boolean;
-    //     const user = await this.user.createQueryBuilder("user")
-    //       .where("user.email = :email", { email: loginDto.email })
-    //       .addSelect(["user.password"])
-    //       .getOne();
-    //
-    //     if (!user)
-    //         throw new HttpException({
-    //             status: HttpStatus.FORBIDDEN,
-    //             error: "Извините, пользователь с такой комбинацией логина и пароля не найден"
-    //         }, HttpStatus.FORBIDDEN);
-    //
-    //     if (await bcrypt.compare(loginDto.password, user.password))
-    //         valid = true;
-    //
-    //     if (!valid)
-    //         throw new HttpException({
-    //             status: HttpStatus.FORBIDDEN,
-    //             error: "Неверный пароль"
-    //         }, HttpStatus.FORBIDDEN);
-    //
-    //
-    //     if (user.role !== Role.Mida)
-    //         throw new HttpException({
-    //             status: HttpStatus.FORBIDDEN,
-    //             error: "Вы не являетесь участником программы :("
-    //         }, HttpStatus.FORBIDDEN);
-    //
-    //     return {
-    //         access_token: this.jwtService.sign({ ...user })
-    //     };
-    // }
-    //
+    async loginMida(loginDto: LoginDto): Promise<any> {
+        let valid: Boolean;
+        const user = await this.user.createQueryBuilder("user")
+          .where("user.email = :email", { email: loginDto.email })
+          .addSelect(["user.password"])
+          .getOne();
+
+        if (!user)
+            throw new HttpException({
+                status: HttpStatus.FORBIDDEN,
+                error: "Извините, пользователь с такой комбинацией логина и пароля не найден"
+            }, HttpStatus.FORBIDDEN);
+
+        if (await bcrypt.compare(loginDto.password, user.password))
+            valid = true;
+
+        if (!valid)
+            throw new HttpException({
+                status: HttpStatus.FORBIDDEN,
+                error: "Неверный пароль"
+            }, HttpStatus.FORBIDDEN);
+
+
+        if (user.role !== Role.Mida)
+            throw new HttpException({
+                status: HttpStatus.FORBIDDEN,
+                error: "Вы не являетесь участником программы :("
+            }, HttpStatus.FORBIDDEN);
+
+        return {
+            access_token: this.jwtService.sign({ ...user })
+        };
+    }
+
     async profile(user: any): Promise<any> {
         return await this.user
           .createQueryBuilder("user")
