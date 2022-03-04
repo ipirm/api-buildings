@@ -1,15 +1,11 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, ManyToOne } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne } from "typeorm";
 import { BaseEntity } from "../../database/entities/base.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsOptional, IsString, Max, Min } from "class-validator";
 import { IsUniq } from "@join-com/typeorm-class-validator-is-uniq";
-import { ImageInterface } from "../../interfaces/image.inteface";
 import { Role } from "../../enums/roles.enum";
 import { ApiModelProperty } from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
 import * as bcrypt from "bcrypt";
-import { RoomCountEnum } from "../../enums/roomCount.enum";
-import { RepairTypeEnum } from "../../enums/repairType.enum";
-import { BuildingTypeEnum } from "../../enums/buildingType.enum";
 import { FormOptionEntity } from "../../option/entities/option.entity";
 
 @Entity("mida_users")
@@ -95,4 +91,9 @@ export class UserEntity extends BaseEntity {
   @ManyToMany(() => FormOptionEntity, p => p.customerRepairEntities)
   repairs: FormOptionEntity[];
 
+  @Column({ default: null })
+  screen: string;
+
+  @Column({ default: false })
+  success: boolean;
 }

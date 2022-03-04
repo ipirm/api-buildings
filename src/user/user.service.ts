@@ -5,6 +5,8 @@ import { UserEntity } from "./entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CrudRequest } from "@nestjsx/crud";
 import { FormOptionEntity } from "../option/entities/option.entity";
+import { SuccessDto } from "./dto/success.dto";
+
 
 @Injectable()
 export class UserService extends TypeOrmCrudService<UserEntity> {
@@ -65,36 +67,39 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   async getItem(user): Promise<any> {
-    console.log(user);
     return await this.user.createQueryBuilder('u')
       .where("u.id =:id",{id: user.id})
       .select([
-        'u.id',
-        'u.name',
-        'u.from_floor',
-        'u.to_floor',
-        'r.id',
-        'r.title',
-        'r.selector',
-        'ro.id',
-        'ro.title',
-        'ro.selector',
-        'p.id',
-        'p.title',
-        'p.selector',
-        'b.id',
-        'b.title',
-        'b.selector',
-        'po.id',
-        'po.title',
-        'po.selector',
+        "u.id",
+        "u.name",
+        "u.from_floor",
+        "u.to_floor",
+        "r.id",
+        "r.title",
+        "r.selector",
+        "ro.id",
+        "ro.title",
+        "ro.selector",
+        "p.id",
+        "p.title",
+        "p.selector",
+        "b.id",
+        "b.title",
+        "b.selector",
+        "po.id",
+        "po.title",
+        "po.selector"
       ])
-      .leftJoin("u.repairs","r")
-      .leftJoin("u.rooms","ro")
-      .leftJoin('u.payment_method','p')
-      .leftJoin('u.building_type','b')
-      .leftJoin('u.project','po')
+      .leftJoin("u.repairs", "r")
+      .leftJoin("u.rooms", "ro")
+      .leftJoin("u.payment_method", "p")
+      .leftJoin("u.building_type", "b")
+      .leftJoin("u.project", "po")
       .getOne()
     // user.id, { relations: ["repairs","payment_method","building_type","rooms","project"] });
+  }
+
+  async success(dto: SuccessDto, user): Promise<any> {
+    return await this.user.update(user.id, { ...dto });
   }
 }

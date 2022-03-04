@@ -18,6 +18,7 @@ import { OptionModule } from './option/option.module';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
+import { AwsService } from "./aws/aws.service";
 
 @Module({
   imports: [UserModule, ElementModule, OptionModule,AuthModule,
@@ -41,6 +42,6 @@ import { AuthModule } from "./auth/auth.module";
   ],
   controllers: [AppController],
 
-  providers: [AppService],
+  providers: [AppService, AwsService],
 })
 export class AppModule {}

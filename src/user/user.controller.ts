@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UserEntity } from "./entities/user.entity";
@@ -11,6 +11,7 @@ import { UserDecorator } from "../decorators/user.decorator";
 import { hasRoles } from "../decorators/roles.decorator";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { Role } from "../enums/roles.enum";
+import { SuccessDto } from "./dto/success.dto";
 
 
 // @ApiBearerAuth()
@@ -99,6 +100,17 @@ export class UserController implements CrudController<UserEntity> {
     @UserDecorator() user: any
   ) {
     return this.service.getItem(user);
+  }
+
+  @ApiBearerAuth()
+  @hasRoles(Role.Mida)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post("/status/mida")
+  success(
+    @Body() dto: SuccessDto,
+    @UserDecorator() user: any
+  ): Promise<any> {
+    return this.service.success(dto, user);
   }
 
   //
