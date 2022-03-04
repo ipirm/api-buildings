@@ -17,7 +17,7 @@ import { ElementEntity } from "../element/entities/element.entity";
         AwsModule,
         JwtModule.register({
             secret: jwtConstants.secret,
-            signOptions: { expiresIn: "286400s" }
+            signOptions: { expiresIn: "1d" }
         }),
         TypeOrmModule.forFeature([UserEntity,FormOptionEntity,ElementEntity])],
     providers: [AuthService, JwtStrategy, UserService, RolesGuard],
