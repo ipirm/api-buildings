@@ -17,8 +17,6 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   async createOneBase(req: CrudRequest, dto: UserEntity): Promise<UserEntity> {
-
-    console.log(dto);
     if (dto.rooms) {
       const rooms = await this.option.findByIds(dto.rooms.toString().split(",").map(item => parseInt(item)));
       Object.assign(dto, { rooms: [...rooms] });
@@ -38,7 +36,6 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   async updateOneBase(req: CrudRequest, dto: UserEntity, id: number): Promise<UpdateResult> {
-    console.log(dto)
     if (dto.rooms) {
       const user = await this.user.findOne(id, { relations: ["rooms"] });
       if (dto.rooms.length) {
