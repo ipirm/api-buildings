@@ -1,4 +1,16 @@
 import { CrudConfigService } from "@nestjsx/crud";
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { UserModule } from "./user/user.module";
+import { ElementModule } from "./element/element.module";
+import { OptionModule } from "./option/option.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule } from "@nestjs/config";
+import { AuthModule } from "./auth/auth.module";
+import { AwsService } from "./aws/aws.service";
+import { UserEntity } from "./user/entities/user.entity";
+
 CrudConfigService.load({
   query: {
     limit: 25,
@@ -8,17 +20,6 @@ CrudConfigService.load({
     only: ["getOneBase", "updateOneBase", "getManyBase", "createOneBase", "deleteOneBase"]
   }
 });
-
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { ElementModule } from './element/element.module';
-import { OptionModule } from './option/option.module';
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
-import { AuthModule } from "./auth/auth.module";
-import { AwsService } from "./aws/aws.service";
 
 @Module({
   imports: [UserModule, ElementModule, OptionModule,AuthModule,
@@ -39,9 +40,9 @@ import { AwsService } from "./aws/aws.service";
         logging: false
       })
     }),
+    TypeOrmModule.forFeature([UserEntity])
   ],
   controllers: [AppController],
-
   providers: [AppService, AwsService],
 })
 export class AppModule {}

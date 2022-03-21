@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Controller, Param, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UserEntity } from "./entities/user.entity";
@@ -7,15 +7,14 @@ import { UserManyDto } from "./dto/user-many.dto";
 import { UserDto } from "./dto/user.dto";
 import { UpdateResult } from "typeorm";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
-import { UserDecorator } from "../decorators/user.decorator";
 import { hasRoles } from "../decorators/roles.decorator";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { Role } from "../enums/roles.enum";
-import { SuccessDto } from "./dto/success.dto";
 
 
-// @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@hasRoles(Role.Admin, Role.User)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags("User")
 @Crud({
   model: {
@@ -70,6 +69,7 @@ export class UserController implements CrudController<UserEntity> {
   constructor(public service: UserService) {
   }
 
+
   @Override()
   createOne(
     @ParsedRequest() req: CrudRequest,
@@ -92,26 +92,6 @@ export class UserController implements CrudController<UserEntity> {
   //   return this.userService.create(createUserDto);
   // }
   //
-  @ApiBearerAuth()
-  @hasRoles(Role.Mida)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get("/resources/fetch-mida")
-  findAll(
-    @UserDecorator() user: any
-  ) {
-    return this.service.getItem(user);
-  }
-
-  @ApiBearerAuth()
-  @hasRoles(Role.Mida)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post("/status/mida")
-  success(
-    @Body() dto: SuccessDto,
-    @UserDecorator() user: any
-  ): Promise<any> {
-    return this.service.success(dto, user);
-  }
 
   //
   // @Get(':id')

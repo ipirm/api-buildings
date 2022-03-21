@@ -7,6 +7,7 @@ import { Role } from "../../enums/roles.enum";
 import { ApiModelProperty } from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
 import * as bcrypt from "bcrypt";
 import { FormOptionEntity } from "../../option/entities/option.entity";
+import { StartTypeEnum } from "../../enums/startType.enum";
 
 @Entity("mida_users")
 export class UserEntity extends BaseEntity {
@@ -69,16 +70,16 @@ export class UserEntity extends BaseEntity {
   @ManyToMany(() => FormOptionEntity, p => p.customerBuildingTypes)
   building_type: FormOptionEntity[];
 
-  @ApiProperty({ example: 1, description: "Select ( Mərtəbə seçimi ) from_floor (min 1,max 9)", required: false })
-  @Min(1)
+  @ApiProperty({ example: 1, description: "Select ( Mərtəbə seçimi ) from_floor (min 0,max 9)", required: false })
+  @Min(0)
   @Max(9)
-  @Column("integer", { default: 1 })
+  @Column("integer", { default: 0, nullable: true })
   from_floor: number;
 
-  @ApiProperty({ example: 8, description: "Select ( Mərtəbə seçimi ) to_floor (min 1,max 9)", required: false })
-  @Min(1)
+  @ApiProperty({ example: 8, description: "Select ( Mərtəbə seçimi ) to_floor (min 0,max 9)", required: false })
+  @Min(0)
   @Max(12)
-  @Column("integer", { default: 1 })
+  @Column("integer", { default: 0, nullable: true })
   to_floor: number;
 
   @ApiProperty({ example: [10, 11], description: "Otaq sayı", required: true })
@@ -96,4 +97,32 @@ export class UserEntity extends BaseEntity {
 
   @Column({ default: false })
   success: boolean;
+
+  @IsEnum(StartTypeEnum)
+  @ApiModelProperty({
+    enum: Object.keys(StartTypeEnum),
+    default: StartTypeEnum.Timer
+  })
+  @Column("enum", { enum: StartTypeEnum, default: StartTypeEnum.Timer })
+  @IsOptional()
+  start: StartTypeEnum;
+
+  @ApiProperty({ example: "24:00:00", description: "Time", required: true })
+  @IsOptional()
+  @Column("time", { name: "start_time", nullable: true })
+  start_time: Date;
+
+  @ApiProperty({ example: 8, description: "Speed Result", required: false })
+  @Min(1)
+  @Max(25)
+  @Column("integer", { default: 0, nullable: true })
+  speed: number;
+
+  @ApiProperty({ example: 8, description: "Speed Result", required: false })
+  @IsOptional()
+  @Column("integer", { default: 0, nullable: true })
+  position: number;
+
 }
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImNyZWF0ZWRBdCI6IjIwMjItMDMtMTlUMTM6MjU6MDcuMjM2WiIsInVwZGF0ZWRBdCI6IjIwMjItMDMtMTlUMTM6MjU6MDcuMjM2WiIsIm5hbWUiOiJTYXNoYSIsImVtYWlsIjoibmFkaXJAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkdS5YeTR2aVJsbERVcnovOFhYc0hnLmhaZi5LWk1meldTRkZmb1RlZTdTYkV4b0VyM1RLRU8iLCJyb2xlIjoiYWRtaW4iLCJzYWx0Ijo4LCJmcm9tX2Zsb29yIjoxLCJ0b19mbG9vciI6OCwic2NyZWVuIjpudWxsLCJzdWNjZXNzIjpmYWxzZSwic3RhcnQiOiJ0aW1lciIsInN0YXJ0X3RpbWUiOm51bGwsImlhdCI6MTY0Nzg2MzczNCwiZXhwIjoxNjQ3OTUwMTM0fQ.DzpdnLjf7NT9zJ8LSCzFP4knAUBQ8_bVQTqzS3Vijik

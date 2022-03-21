@@ -5,7 +5,6 @@ import { UserEntity } from "./entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CrudRequest } from "@nestjsx/crud";
 import { FormOptionEntity } from "../option/entities/option.entity";
-import { SuccessDto } from "./dto/success.dto";
 
 
 @Injectable()
@@ -19,6 +18,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
 
   async createOneBase(req: CrudRequest, dto: UserEntity): Promise<UserEntity> {
 
+    console.log(dto);
     if (dto.rooms) {
       const rooms = await this.option.findByIds(dto.rooms.toString().split(",").map(item => parseInt(item)));
       Object.assign(dto, { rooms: [...rooms] });
@@ -38,68 +38,44 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   async updateOneBase(req: CrudRequest, dto: UserEntity, id: number): Promise<UpdateResult> {
+    console.log(dto)
     if (dto.rooms) {
       const user = await this.user.findOne(id, { relations: ["rooms"] });
-      const rooms = await this.option.findByIds(dto.rooms.toString().split(",").map(item => parseInt(item)));
-      user.rooms = [...rooms];
+      if (dto.rooms.length) {
+        const rooms = await this.option.findByIds(dto.rooms.toString().split(",").map(item => parseInt(item)));
+        user.rooms = [...rooms];
+      } else {
+        user.rooms = [];
+      }
       await this.user.save(user);
       delete dto.rooms;
     }
 
     if (dto.building_type) {
       const user = await this.user.findOne(id, { relations: ["building_type"] });
-      const building_type = await this.option.findByIds(dto.building_type.toString().split(",").map(item => parseInt(item)));
-      user.building_type = [...building_type];
+      if (dto.building_type.length) {
+        const building_type = await this.option.findByIds(dto.building_type.toString().split(",").map(item => parseInt(item)));
+        user.building_type = [...building_type];
+      } else {
+        user.building_type = [];
+      }
       await this.user.save(user);
       delete dto.building_type;
     }
 
     if (dto.repairs) {
       const user = await this.user.findOne(id, { relations: ["repairs"] });
-      const repairs = await this.option.findByIds(dto.repairs.toString().split(",").map(item => parseInt(item)));
-      user.repairs = [...repairs];
+      if (dto.repairs.length) {
+        const repairs = await this.option.findByIds(dto.repairs.toString().split(",").map(item => parseInt(item)));
+        user.repairs = [...repairs];
+      } else {
+        user.repairs = [];
+      }
       await this.user.save(user);
       delete dto.repairs;
     }
-
     return await this.user.update(id, { ...dto });
 
   }
 
-  async getItem(user): Promise<any> {
-    return await this.user.createQueryBuilder('u')
-      .where("u.id =:id",{id: user.id})
-      .select([
-        "u.id",
-        "u.name",
-        "u.from_floor",
-        "u.to_floor",
-        "r.id",
-        "r.title",
-        "r.selector",
-        "ro.id",
-        "ro.title",
-        "ro.selector",
-        "p.id",
-        "p.title",
-        "p.selector",
-        "b.id",
-        "b.title",
-        "b.selector",
-        "po.id",
-        "po.title",
-        "po.selector"
-      ])
-      .leftJoin("u.repairs", "r")
-      .leftJoin("u.rooms", "ro")
-      .leftJoin("u.payment_method", "p")
-      .leftJoin("u.building_type", "b")
-      .leftJoin("u.project", "po")
-      .getOne()
-    // user.id, { relations: ["repairs","payment_method","building_type","rooms","project"] });
-  }
-
-  async success(dto: SuccessDto, user): Promise<any> {
-    return await this.user.update(user.id, { ...dto });
-  }
 }

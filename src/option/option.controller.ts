@@ -4,10 +4,14 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { FormOptionEntity } from "./entities/option.entity";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
+import { hasRoles } from "../decorators/roles.decorator";
+import { Role } from "../enums/roles.enum";
+import { RolesGuard } from "../auth/guards/roles.guard";
 
 
-// @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@hasRoles(Role.Admin)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags("Option")
 @Crud({
   model: {

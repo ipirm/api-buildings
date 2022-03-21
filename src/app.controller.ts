@@ -1,15 +1,22 @@
-import { Controller, Delete, Get, Param, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { AppService } from './app.service';
-import { ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { AppService } from "./app.service";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { SuccessDto } from "./user/dto/success.dto";
+import { UserDecorator } from "./decorators/user.decorator";
+import { hasRoles } from "./decorators/roles.decorator";
+import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
+import { RolesGuard } from "./auth/guards/roles.guard";
+import { Role } from "./enums/roles.enum";
 
 @ApiTags("Default")
 @Controller("api")
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) {
+  }
 
-  // @ApiBearerAuth()
-  // @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiParam({
     name: "alt",
     required: true,
@@ -47,6 +54,8 @@ export class AppController {
     return this.appService.uploadFile(file, alt, folder);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiParam({
     name: "name",
     required: true,
@@ -69,4 +78,27 @@ export class AppController {
   ) {
     return this.appService.removeFile(name, folder);
   }
+
+
+  @ApiBearerAuth()
+  @hasRoles(Role.Mida)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get("user/resources/fetch-mida")
+  findAll(
+    @UserDecorator() user: any
+  ) {
+    return this.appService.getItem(user);
+  }
+
+  @ApiBearerAuth()
+  @hasRoles(Role.Mida)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post("user/status/mida")
+  success(
+    @Body() dto: SuccessDto,
+    @UserDecorator() user: any
+  ): Promise<any> {
+    return this.appService.success(dto, user);
+  }
+
 }

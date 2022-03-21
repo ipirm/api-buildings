@@ -20,9 +20,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
-    "engines": {
-      "node": "v17.3.1"
-    },
+  "engines": {
+    "node": "v17.3.1"
+  },
   "dependencies": {
     "@join-com/typeorm-class-validator-is-uniq": "^2.0.0",
     "@nestjs/common": "^8.0.0",
@@ -39,6 +39,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "easy-yandex-s3": "^1.1.6",
+    "helmet": "^5.0.2",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "pg": "^8.7.3",
