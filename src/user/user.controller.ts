@@ -42,6 +42,10 @@ import { UserDecorator } from "../decorators/user.decorator";
       repairs: {
         eager: true
       },
+      created_by: {
+        alias: 'created_by',
+        eager: false
+      },
       'payment_method.formSelectEntity':{
         eager: true,
         alias: 'rep1',
