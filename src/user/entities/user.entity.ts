@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "../../database/entities/base.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsOptional, IsString, Max, Min } from "class-validator";
@@ -122,6 +122,15 @@ export class UserEntity extends BaseEntity {
   @IsOptional()
   @Column("integer", { default: 0, nullable: true })
   position: number;
+
+  @ManyToOne(() => UserEntity, user => user.users)
+  @ApiProperty({ example: 13, description: "User Created By", required: false })
+  @IsOptional()
+  created_by: UserEntity;
+
+  @OneToMany(() => UserEntity, photo => photo.created_by)
+  @IsOptional()
+  users: UserEntity[];
 
 }
 

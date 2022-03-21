@@ -10,6 +10,7 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { hasRoles } from "../decorators/roles.decorator";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { Role } from "../enums/roles.enum";
+import { UserDecorator } from "../decorators/user.decorator";
 
 
 @ApiBearerAuth()
@@ -73,18 +74,20 @@ export class UserController implements CrudController<UserEntity> {
   @Override()
   createOne(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: UserEntity
+    @ParsedBody() dto: UserEntity,
+    @UserDecorator() user: any
   ): Promise<UserEntity> {
-    return this.service.createOneBase(req, dto);
+    return this.service.createOneBase(req, dto, user);
   }
 
   @Override()
   updateOne(
     @ParsedRequest() req: CrudRequest,
     @ParsedBody() dto: UserEntity,
-    @Param("id") id: number
+    @Param("id") id: number,
+    @UserDecorator() user: any
   ): Promise<UpdateResult> {
-    return this.service.updateOneBase(req, dto, id);
+    return this.service.updateOneBase(req, dto, id, user);
   }
 
   // @Post()

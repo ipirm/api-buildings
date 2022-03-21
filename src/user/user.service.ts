@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
 import { Repository, UpdateResult } from "typeorm";
 import { UserEntity } from "./entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CrudRequest } from "@nestjsx/crud";
 import { FormOptionEntity } from "../option/entities/option.entity";
+import { Role } from "../enums/roles.enum";
 
 
 @Injectable()
@@ -16,7 +17,14 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     super(user);
   }
 
-  async createOneBase(req: CrudRequest, dto: UserEntity): Promise<UserEntity> {
+  async createOneBase(req: CrudRequest, dto: UserEntity, user): Promise<UserEntity> {
+
+    if (user.role !== Role.Admin)
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: "Извините, вы не можете создавать пользователей"
+      }, HttpStatus.FORBIDDEN);
+
     if (dto.rooms) {
       const rooms = await this.option.findByIds(dto.rooms.toString().split(",").map(item => parseInt(item)));
       Object.assign(dto, { rooms: [...rooms] });
@@ -35,7 +43,25 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     return await this.user.save(this.user.create(dto));
   }
 
-  async updateOneBase(req: CrudRequest, dto: UserEntity, id: number): Promise<UpdateResult> {
+  async updateOneBase(req: CrudRequest, dto: UserEntity, id: number, user): Promise<UpdateResult> {
+    let lock = false;
+    if (user.role === Role.User) {
+      const userData = await this.user.findOne(id, { relations: ["created_by"] });
+      if (userData.created_by.id !== user.id) {
+        lock = true;
+      }
+    }
+    if (user.role === Role.Mida) {
+      lock = true;
+    }
+
+    if (lock)
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: "Извините, вы не можете менять данного пользователя"
+      }, HttpStatus.FORBIDDEN);
+
+
     if (dto.rooms) {
       const user = await this.user.findOne(id, { relations: ["rooms"] });
       if (dto.rooms.length) {
