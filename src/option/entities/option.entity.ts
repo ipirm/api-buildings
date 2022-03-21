@@ -31,7 +31,7 @@ export class FormOptionEntity extends BaseEntity {
   @OneToMany(() => UserEntity, c => c.project)
   projectCustomerEntities: UserEntity[];
 
-  @ManyToMany(() => UserEntity, h => h.rooms)
+  @ManyToMany(() => UserEntity, h => h.rooms,{ onDelete: "CASCADE" })
   @JoinTable()
   customerRoomsEntities: UserEntity[];
 

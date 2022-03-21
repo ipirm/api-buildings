@@ -123,7 +123,7 @@ export class UserEntity extends BaseEntity {
   @Column("integer", { default: 0, nullable: true })
   position: number;
 
-  @ManyToOne(() => UserEntity, user => user.users)
+  @ManyToOne(() => UserEntity, user => user.users,{ onDelete: "CASCADE" })
   @ApiProperty({ example: 13, description: "User Created By", required: false })
   @IsOptional()
   created_by: UserEntity;
