@@ -31,6 +31,8 @@ export class AppService {
         "u.from_floor",
         "u.to_floor",
         "u.start",
+        "u.start_time",
+        "u.position",
         "r.id",
         "r.title",
         "r.selector",
