@@ -31,13 +31,13 @@ async function bootstrap() {
   }));
 
   app.use(helmet());
-  // app.enableCors({
-  //   origin: ["https://building-admin.tviser.agency"]
-  // });
+  app.enableCors({
+    origin: ["https://building-admin.tviser.agency"]
+  });
 
-  app.enableCors()
+  // app.enableCors()
 
-  SwaggerModule.setup("api", app, document);
+  // SwaggerModule.setup("api", app, document);
 
   await app.listen(parseInt(process.env.PORT)).then(() => logger.log(`App running on ${process.env.PORT} port`));
 }
