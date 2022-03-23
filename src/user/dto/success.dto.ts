@@ -6,19 +6,15 @@ export class SuccessDto {
 
   @ApiProperty({ example: "image url", description: "Name", required: true })
   @IsString()
-  @Column()
   @IsOptional()
   screen: string;
 
   @ApiProperty({ example: true, description: "Status", required: true })
   @IsBoolean()
-  @Column()
   @IsOptional()
   success: boolean;
 
   @ApiProperty({ example: "Speed in seconds", description: "speed", required: true })
-  @IsNumber()
-  @Column()
   @IsOptional()
   speed: number;
 }
