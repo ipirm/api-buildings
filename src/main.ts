@@ -32,7 +32,7 @@ async function bootstrap() {
 
   app.use(helmet());
   app.enableCors({
-    // origin: ["https://building-admin.tviser.agency"]
+     origin: ["https://building-admin.tviser.agency"]
   });
 
 
