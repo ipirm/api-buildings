@@ -6,30 +6,3 @@ const socket = io('https://building.tviser.agency', {
     token: token
   }
 });
-
-const message = document.getElementById("message");
-const messages = document.getElementById("messages");
-
-const handleSubmitNewMessage = () => {
-  socket.emit("message", {
-    data: { text: message.value, m_type: "text" }
-  });
-};
-
-socket.on("message", (data) => {
-  if (data.m_type === "text") {
-    handleNewMessage(data.text);
-  }
-});
-
-socket.on("getUnRead", (data) => {
-  console.log(data);
-});
-
-socket.on("getChats", (data) => {
-  console.log(data);
-});
-
-socket.on("onlineList", (data) => {
-  console.log(data);
-});

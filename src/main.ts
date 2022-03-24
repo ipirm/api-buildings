@@ -32,10 +32,10 @@ async function bootstrap() {
 
   app.use(helmet());
   app.enableCors({
-    origin: ["https://building-admin.tviser.agency"]
+    // origin: ["https://building-admin.tviser.agency"]
   });
 
-  
+
   // app.enableCors()
 
   // SwaggerModule.setup("api", app, document);
