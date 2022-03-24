@@ -35,6 +35,7 @@ async function bootstrap() {
     origin: ["https://building-admin.tviser.agency"]
   });
 
+  
   // app.enableCors()
 
   // SwaggerModule.setup("api", app, document);
