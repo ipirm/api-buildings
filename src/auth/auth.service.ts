@@ -50,7 +50,7 @@ export class AuthService {
             access_token: this.jwtService.sign({ ...user })
         };
     }
-    //
+
     async login(loginDto: LoginDto): Promise<any> {
         let valid: Boolean;
         const user = await this.user.createQueryBuilder("user")
@@ -79,7 +79,7 @@ export class AuthService {
             access_token: this.jwtService.sign({ ...user })
         };
     }
-    //
+
     async loginMida(loginDto: LoginDto): Promise<any> {
         let valid: Boolean;
         const user = await this.user.createQueryBuilder("user")
@@ -109,6 +109,12 @@ export class AuthService {
                 error: "Вы не являетесь участником программы :("
             }, HttpStatus.FORBIDDEN);
 
+        if(user.online)
+            throw new HttpException({
+                status: HttpStatus.FORBIDDEN,
+                error: "Пользователь онлайн"
+            }, HttpStatus.FORBIDDEN);
+
         return {
             access_token: this.jwtService.sign({ ...user })
         };
@@ -120,6 +126,13 @@ export class AuthService {
           .where("user.id = :id", { id: user.id })
           .getOne();
     }
+
+    async setStatus(id, online: boolean): Promise<any> {
+        const data = await this.user.findOne(id);
+        console.log(data)
+        return await this.user.update(id, { online: online });
+    }
+
     //
     // async loginMidaUser(loginDto: LoginDto): Promise<any> {
     //     let valid: Boolean;

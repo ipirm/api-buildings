@@ -11,6 +11,7 @@ import { AwsModule } from "../aws/aws.module";
 import { UserEntity } from "../user/entities/user.entity";
 import { FormOptionEntity } from "../option/entities/option.entity";
 import { ElementEntity } from "../element/entities/element.entity";
+import { AuthGateway } from "./auth.gateway";
 
 @Module({
     imports: [
@@ -20,7 +21,7 @@ import { ElementEntity } from "../element/entities/element.entity";
             signOptions: { expiresIn: "1d" }
         }),
         TypeOrmModule.forFeature([UserEntity,FormOptionEntity,ElementEntity])],
-    providers: [AuthService, JwtStrategy, UserService, RolesGuard],
+    providers: [AuthService, JwtStrategy, UserService, RolesGuard,AuthGateway],
     controllers: [AuthController]
 })
 export class AuthModule {

@@ -123,7 +123,7 @@ export class UserEntity extends BaseEntity {
   @Column("integer", { default: 0, nullable: true })
   position: number;
 
-  @ManyToOne(() => UserEntity, user => user.users,{ onDelete: "CASCADE" })
+  @ManyToOne(() => UserEntity, user => user.users, { onDelete: "CASCADE" })
   @ApiProperty({ example: 13, description: "User Created By", required: false })
   @IsOptional()
   created_by: UserEntity;
@@ -132,6 +132,8 @@ export class UserEntity extends BaseEntity {
   @IsOptional()
   users: UserEntity[];
 
+  @Column({default: false})
+  online: boolean;
 }
 
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImNyZWF0ZWRBdCI6IjIwMjItMDMtMTlUMTM6MjU6MDcuMjM2WiIsInVwZGF0ZWRBdCI6IjIwMjItMDMtMTlUMTM6MjU6MDcuMjM2WiIsIm5hbWUiOiJTYXNoYSIsImVtYWlsIjoibmFkaXJAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkdS5YeTR2aVJsbERVcnovOFhYc0hnLmhaZi5LWk1meldTRkZmb1RlZTdTYkV4b0VyM1RLRU8iLCJyb2xlIjoiYWRtaW4iLCJzYWx0Ijo4LCJmcm9tX2Zsb29yIjoxLCJ0b19mbG9vciI6OCwic2NyZWVuIjpudWxsLCJzdWNjZXNzIjpmYWxzZSwic3RhcnQiOiJ0aW1lciIsInN0YXJ0X3RpbWUiOm51bGwsImlhdCI6MTY0Nzg2MzczNCwiZXhwIjoxNjQ3OTUwMTM0fQ.DzpdnLjf7NT9zJ8LSCzFP4knAUBQ8_bVQTqzS3Vijik
