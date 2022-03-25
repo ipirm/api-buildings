@@ -12,7 +12,7 @@ import { jwtConstants } from "./jwt/constants";
 import { AuthService } from "./auth.service";
 
 
-@WebSocketGateway({ cors: true, allowEIO3: true, path: "wss" })
+@WebSocketGateway({ cors: true, allowEIO3: true})
 export class AuthGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
