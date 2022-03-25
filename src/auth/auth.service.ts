@@ -112,7 +112,7 @@ export class AuthService {
         if(user.online)
             throw new HttpException({
                 status: HttpStatus.FORBIDDEN,
-                error: "Пользователь онлайн"
+                error: "The user is online"
             }, HttpStatus.FORBIDDEN);
 
         return {
