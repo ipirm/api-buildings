@@ -12,7 +12,7 @@ import { jwtConstants } from "./jwt/constants";
 import { AuthService } from "./auth.service";
 
 
-@WebSocketGateway({ cors: true, allowEIO3: true })
+@WebSocketGateway({ cors: true, allowEIO3: true, path: "wss" })
 export class AuthGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
@@ -30,8 +30,8 @@ export class AuthGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleConnection(@ConnectedSocket() socket: Socket): Promise<void> {
-    console.log(jwtConstants);
-    console.log("connected", socket);
+    // console.log(jwtConstants);
+    //  console.log("connected", socket);
     console.log(socket.handshake.auth.token);
     const decoded = await this.jwt.verify(socket.handshake.auth.token, jwtConstants);
     await this.auth.setStatus(decoded.id, true);
