@@ -32,15 +32,16 @@ export class AuthGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleConnection(@ConnectedSocket() socket: Socket): Promise<void> {
     // console.log(jwtConstants);
     //  console.log("connected", socket);
-    console.log(socket.handshake.auth.token);
+    console.log(socket.handshake.auth.token)
     const decoded = await this.jwt.verify(socket.handshake.auth.token, jwtConstants);
-    await this.auth.setStatus(decoded.id, true);
+    console.log(decoded)
+    await this.auth.setStatus(decoded.id, true,socket.handshake.address);
   }
 
   async handleDisconnect(@ConnectedSocket() socket: Socket): Promise<void> {
     console.log("disconnected");
     const decoded = await this.jwt.verify(socket.handshake.auth.token, jwtConstants);
-    await this.auth.setStatus(decoded.id, false);
+    await this.auth.setStatus(decoded.id, false,socket.handshake.address);
   }
 
 }

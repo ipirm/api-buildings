@@ -8,6 +8,8 @@ import * as bcrypt from "bcrypt";
 import { Role } from "../enums/roles.enum";
 import { UserEntity } from "../user/entities/user.entity";
 
+const TelegramBot = require("node-telegram-bot-api");
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -127,9 +129,26 @@ export class AuthService {
           .getOne();
     }
 
-    async setStatus(id, online: boolean): Promise<any> {
+    async setStatus(id, online: boolean,address: string): Promise<any> {
         const data = await this.user.findOne(id);
-        console.log(data)
+        console.log(data);
+
+        // replace the value below with the Telegram token you receive from @BotFather
+        const token = "5015612695:AAGD_1f_Y3hOfmMPwmxSzavy6yYVygi5Sz0";
+        const chatId = -1001713740840;
+
+// Create a bot that uses 'polling' to fetch new updates
+        const bot = new TelegramBot(token, { polling: true });
+        console.log("online");
+        const msg = `
+        
+        Имя: ${data.name}
+        Почта: ${data.email}
+        IP: ${address}
+        Status: ${online ? "Online" : "Offline"}
+        `;
+        bot.sendMessage(chatId, msg);
+
         return await this.user.update(id, { online: online });
     }
 
